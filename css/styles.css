@@ -597,6 +597,7 @@ body {
     height: 28px;
     border: 2px solid var(--gray-200);
     border-top-color: var(--black);
+    border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin-bottom: 16px;
 }
