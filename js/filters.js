@@ -57,14 +57,14 @@ const FilterSettings = {
             this.triggerUpdate();
         });
 
-        // Time of day segments
-        document.querySelectorAll('.filters-bar .segmented-control:first-of-type .segment').forEach(btn => {
+        // Time of day filter buttons
+        document.querySelectorAll('.sidebar-section:nth-child(4) .filter-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const value = e.target.dataset.value;
                 this.settings.timeOfDay = value;
 
                 // Update active state
-                e.target.parentElement.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+                e.target.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
 
                 this.save();
@@ -72,14 +72,14 @@ const FilterSettings = {
             });
         });
 
-        // Rink type segments
-        document.getElementById('rinkTypeControl').querySelectorAll('.segment').forEach(btn => {
+        // Rink type filter buttons
+        document.getElementById('rinkTypeControl').querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const value = e.target.dataset.value;
                 this.settings.rinkType = value;
 
                 // Update active state
-                e.target.parentElement.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+                e.target.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
 
                 this.save();
@@ -87,14 +87,14 @@ const FilterSettings = {
             });
         });
 
-        // Time filter segments (upcoming/all/past)
-        document.getElementById('timeFilterControl').querySelectorAll('.segment').forEach(btn => {
+        // Time filter buttons (upcoming/all/past)
+        document.getElementById('timeFilterControl').querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const value = e.target.dataset.value;
                 this.settings.timeFilter = value;
 
                 // Update active state
-                e.target.parentElement.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+                e.target.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
 
                 this.save();
@@ -118,17 +118,17 @@ const FilterSettings = {
         distanceSlider.disabled = this.settings.anyDistance;
 
         // Time of day
-        document.querySelectorAll('.filters-bar .segmented-control:first-of-type .segment').forEach(btn => {
+        document.querySelectorAll('.sidebar-section:nth-child(4) .filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.value === this.settings.timeOfDay);
         });
 
         // Rink type
-        document.getElementById('rinkTypeControl').querySelectorAll('.segment').forEach(btn => {
+        document.getElementById('rinkTypeControl').querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.value === this.settings.rinkType);
         });
 
         // Time filter
-        document.getElementById('timeFilterControl').querySelectorAll('.segment').forEach(btn => {
+        document.getElementById('timeFilterControl').querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.value === this.settings.timeFilter);
         });
     },
