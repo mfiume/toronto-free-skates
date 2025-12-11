@@ -7,14 +7,19 @@ const API = {
     // ArcGIS FeatureServer for rink locations
     RINKS_URL: 'https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/Skate_Locations_v2/FeatureServer/0/query',
 
-    // Toronto Open Data for schedule data (via CORS proxy)
+    // Toronto Open Data for schedule data
     SCHEDULE_BASE: 'https://www.toronto.ca/data/parks/live/dropin/skate',
-
-    // CORS proxy for Toronto API
-    CORS_PROXY: 'https://corsproxy.io/?',
 
     // Cache for rinks data
     rinksCache: null,
+
+    /**
+     * Get proxied URL for Toronto API
+     */
+    getProxiedUrl(url) {
+        // Use allorigins.win which is reliable and free
+        return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+    },
 
     /**
      * Fetch all rink locations from ArcGIS
@@ -56,7 +61,8 @@ const API = {
      * Uses CORS proxy since Toronto's API doesn't have CORS headers
      */
     async fetchSchedule(rinkId) {
-        const url = `${this.CORS_PROXY}${encodeURIComponent(`${this.SCHEDULE_BASE}/${rinkId}.json`)}`;
+        const targetUrl = `${this.SCHEDULE_BASE}/${rinkId}.json`;
+        const url = this.getProxiedUrl(targetUrl);
 
         try {
             const response = await fetch(url);
