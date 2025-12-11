@@ -6,7 +6,7 @@
 const FilterSettings = {
     defaults: {
         maxDistance: 10,
-        anyDistance: false,
+        anyDistance: true,
         timeOfDay: 'all',
         rinkType: '',
         timeFilter: 'upcoming'
