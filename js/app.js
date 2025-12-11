@@ -32,6 +32,19 @@ const App = {
      * Bind UI events
      */
     bindEvents() {
+        // Mobile filter toggle
+        const filterToggle = document.getElementById('filterToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebarClose');
+
+        filterToggle.addEventListener('click', () => {
+            sidebar.classList.add('open');
+        });
+
+        sidebarClose.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
+
         // Calendar navigation
         document.getElementById('prevDay').addEventListener('click', () => {
             this.selectedDate.setDate(this.selectedDate.getDate() - 1);

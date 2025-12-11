@@ -261,7 +261,13 @@ const Views = {
      * Open location in maps
      */
     openInMaps(lat, lng) {
-        const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+        const userLocation = LocationManager.getLocation();
+        let url;
+        if (userLocation) {
+            url = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${lat},${lng}`;
+        } else {
+            url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+        }
         window.open(url, '_blank');
     },
 

@@ -11,9 +11,10 @@
 <body>
     <div id="app">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h1>Toronto Free Skates</h1>
+                <button class="sidebar-close" id="sidebarClose">Done</button>
             </div>
 
             <!-- Location -->
@@ -78,6 +79,7 @@
         <main class="main-content">
             <!-- View Tabs -->
             <div class="content-header">
+                <button class="filter-toggle" id="filterToggle">Filters</button>
                 <div class="view-tabs">
                     <button class="tab active" data-view="calendar">Calendar</button>
                     <button class="tab" data-view="list">List</button>
