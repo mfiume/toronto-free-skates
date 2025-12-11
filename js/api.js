@@ -17,8 +17,8 @@ const API = {
      * Get proxied URL for Toronto API
      */
     getProxiedUrl(url) {
-        // Use allorigins.win which is reliable and free
-        return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+        // Use corsproxy.io
+        return `https://corsproxy.io/?${encodeURIComponent(url)}`;
     },
 
     /**
