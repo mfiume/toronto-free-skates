@@ -95,13 +95,15 @@
             <div id="calendarView" class="view active">
                 <div class="calendar-header">
                     <button class="btn btn-icon" id="prevDay">◀</button>
-                    <button class="date-picker-btn" id="datePickerBtn">
-                        <span id="selectedDateDisplay">Today</span>
-                    </button>
+                    <div class="date-picker-wrapper">
+                        <button class="date-picker-btn" id="datePickerBtn">
+                            <span id="selectedDateDisplay">Today</span>
+                        </button>
+                        <input type="date" id="datePicker" class="date-picker-input">
+                    </div>
                     <button class="btn btn-icon" id="nextDay">▶</button>
                     <button class="btn btn-small" id="todayBtn">Today</button>
                 </div>
-                <input type="date" id="datePicker" style="display: none;">
                 <div class="sort-bar">
                     <label>Sort:</label>
                     <select id="calendarSort">

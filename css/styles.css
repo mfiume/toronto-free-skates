@@ -332,6 +332,10 @@ body {
     margin-bottom: 16px;
 }
 
+.date-picker-wrapper {
+    position: relative;
+}
+
 .date-picker-btn {
     padding: 10px 24px;
     background: var(--white);
@@ -346,6 +350,28 @@ body {
 
 .date-picker-btn:hover {
     background: var(--gray-100);
+}
+
+.date-picker-input {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    margin-top: 4px;
+}
+
+.date-picker-input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
 }
 
 /* Sort Bar */
