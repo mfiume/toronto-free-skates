@@ -298,12 +298,8 @@ const Views = {
                     </div>
                 </div>
                 <div class="session-actions">
-                    <button class="action-btn" title="Get Directions" onclick="event.stopPropagation(); Views.openInMaps(${rink.lat}, ${rink.lng})">
-                        🗺️
-                    </button>
-                    <button class="action-btn" title="Add to Calendar" onclick="event.stopPropagation(); Views.addToCalendar('${rink.name.replace(/'/g, "\\'")}', '${rink.address.replace(/'/g, "\\'")}', '${session.date}', '${session.time}', '${session.age}')">
-                        📅
-                    </button>
+                    <a class="action-link" href="#" onclick="event.preventDefault(); event.stopPropagation(); Views.openInMaps(${rink.lat}, ${rink.lng})">Map</a>
+                    <a class="action-link" href="#" onclick="event.preventDefault(); event.stopPropagation(); Views.addToCalendar('${rink.name.replace(/'/g, "\\'")}', '${rink.address.replace(/'/g, "\\'")}', '${session.date}', '${session.time}', '${session.age}')">Cal</a>
                 </div>
             </div>
         `;

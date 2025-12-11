@@ -527,24 +527,19 @@ body {
 
 .session-actions {
     display: flex;
-    gap: 6px;
+    gap: 12px;
 }
 
-.action-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--gray-300);
-    background: var(--white);
-    cursor: pointer;
-    font-size: 13px;
-    transition: all 0.1s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.action-link {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.1s;
 }
 
-.action-btn:hover {
-    background: var(--gray-100);
+.action-link:hover {
+    color: var(--black);
 }
 
 /* Map View */
