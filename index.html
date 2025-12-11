@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toronto Free Skates</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛸️</text></svg>">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <h1>⛸️ Toronto Free Skates</h1>
+            <p class="subtitle">Find leisure skating sessions near you</p>
+        </header>
+
+        <!-- Location Bar -->
+        <div class="location-bar">
+            <div class="location-status" id="locationStatus">
+                <span class="location-icon">📍</span>
+                <span id="locationText">Detecting location...</span>
+            </div>
+            <div class="address-input-container" id="addressContainer" style="display: none;">
+                <input type="text" id="addressInput" placeholder="Enter address or postal code..." autocomplete="off">
+                <div id="addressSuggestions" class="suggestions-dropdown"></div>
+            </div>
+            <button class="btn btn-secondary" id="useAddressBtn">Use Address Instead</button>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar">
+            <div class="filter-group">
+                <label>Distance</label>
+                <div class="distance-control">
+                    <input type="range" id="distanceSlider" min="1" max="50" value="10">
+                    <span id="distanceValue">10 km</span>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="anyDistance"> Any
+                    </label>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label>Time of Day</label>
+                <div class="segmented-control">
+                    <button class="segment active" data-value="all">All</button>
+                    <button class="segment" data-value="morning">Morning</button>
+                    <button class="segment" data-value="afternoon">Afternoon</button>
+                    <button class="segment" data-value="evening">Evening</button>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label>Rink Type</label>
+                <div class="segmented-control" id="rinkTypeControl">
+                    <button class="segment active" data-value="">All</button>
+                    <button class="segment" data-value="Indoor">Indoor</button>
+                    <button class="segment" data-value="Outdoor">Outdoor</button>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label>Sessions</label>
+                <div class="segmented-control" id="timeFilterControl">
+                    <button class="segment active" data-value="upcoming">Upcoming</button>
+                    <button class="segment" data-value="all">All</button>
+                    <button class="segment" data-value="past">Past</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Tabs -->
+        <div class="view-tabs">
+            <button class="tab active" data-view="calendar">📅 Calendar</button>
+            <button class="tab" data-view="list">📋 List</button>
+            <button class="tab" data-view="map">🗺️ Map</button>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading">
+            <div class="spinner"></div>
+            <p>Loading skating sessions...</p>
+        </div>
+
+        <!-- Calendar View -->
+        <div id="calendarView" class="view active">
+            <div class="calendar-header">
+                <button class="btn btn-icon" id="prevDay">◀</button>
+                <button class="date-picker-btn" id="datePickerBtn">
+                    <span id="selectedDateDisplay">Today</span>
+                </button>
+                <button class="btn btn-icon" id="nextDay">▶</button>
+                <button class="btn btn-secondary" id="todayBtn">Today</button>
+            </div>
+            <input type="date" id="datePicker" style="display: none;">
+            <div class="sort-bar">
+                <label>Sort by:</label>
+                <select id="calendarSort">
+                    <option value="time">Time</option>
+                    <option value="name">Name</option>
+                    <option value="distance">Distance</option>
+                </select>
+                <input type="text" id="calendarSearch" placeholder="Search rinks...">
+            </div>
+            <div id="calendarSessions" class="sessions-list"></div>
+        </div>
+
+        <!-- List View -->
+        <div id="listView" class="view">
+            <div class="sort-bar">
+                <label>Sort by:</label>
+                <select id="listSort">
+                    <option value="time">Time</option>
+                    <option value="name">Name</option>
+                    <option value="distance">Distance</option>
+                </select>
+                <input type="text" id="listSearch" placeholder="Search rinks...">
+            </div>
+            <div id="listSessions" class="sessions-list"></div>
+        </div>
+
+        <!-- Map View -->
+        <div id="mapView" class="view">
+            <div id="map"></div>
+            <div id="mapSidebar" class="map-sidebar">
+                <h3 id="mapSidebarTitle">Select a rink</h3>
+                <div id="mapSidebarContent"></div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">🔍</div>
+            <h3>No skating sessions found</h3>
+            <p id="emptyMessage">Try adjusting your filters or expanding your search distance.</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/location.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/views.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
