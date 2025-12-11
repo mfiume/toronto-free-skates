@@ -35,7 +35,7 @@ const LocationManager = {
                 this.reverseGeocode(this.userLocation.lat, this.userLocation.lng)
                     .then(address => {
                         if (address) {
-                            textEl.textContent = `📍 ${address}`;
+                            textEl.textContent = address;
                         }
                     });
 
