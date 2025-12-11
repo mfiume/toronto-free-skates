@@ -7,8 +7,11 @@ const API = {
     // ArcGIS FeatureServer for rink locations
     RINKS_URL: 'https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/Skate_Locations_v2/FeatureServer/0/query',
 
-    // Toronto Open Data for schedule data
-    SCHEDULE_URL: 'https://www.toronto.ca/data/parks/live/dropin/skate',
+    // Toronto Open Data for schedule data (via CORS proxy)
+    SCHEDULE_BASE: 'https://www.toronto.ca/data/parks/live/dropin/skate',
+
+    // CORS proxy for Toronto API
+    CORS_PROXY: 'https://corsproxy.io/?',
 
     // Cache for rinks data
     rinksCache: null,
@@ -50,10 +53,10 @@ const API = {
 
     /**
      * Fetch schedule for a specific rink
-     * Toronto's API returns UTF-16 encoded data, which we handle via proxy or text parsing
+     * Uses CORS proxy since Toronto's API doesn't have CORS headers
      */
     async fetchSchedule(rinkId) {
-        const url = `${this.SCHEDULE_URL}/${rinkId}.json`;
+        const url = `${this.CORS_PROXY}${encodeURIComponent(`${this.SCHEDULE_BASE}/${rinkId}.json`)}`;
 
         try {
             const response = await fetch(url);
@@ -70,6 +73,10 @@ const API = {
             try {
                 const decoder = new TextDecoder('utf-16le');
                 text = decoder.decode(buffer);
+                // Check if it looks like valid JSON
+                if (!text.trim().startsWith('[') && !text.trim().startsWith('{')) {
+                    throw new Error('Not UTF-16');
+                }
             } catch {
                 // Fallback to UTF-8
                 const decoder = new TextDecoder('utf-8');
@@ -152,40 +159,43 @@ const API = {
             filteredRinks = filteredRinks.filter(rink => rink.type === filters.rinkType);
         }
 
-        // Fetch schedules in parallel
-        const schedulePromises = filteredRinks.map(async rink => {
-            const schedule = await this.fetchSchedule(rink.id);
-            return schedule.map(session => ({
-                rink: {
-                    id: rink.id,
-                    name: rink.name,
-                    address: rink.address,
-                    type: rink.type,
-                    lat: rink.lat,
-                    lng: rink.lng,
-                    distance: rink.distance
-                },
-                session
-            }));
-        });
-
-        // Wait for all with timeout
-        const results = await Promise.allSettled(
-            schedulePromises.map(p =>
-                Promise.race([
-                    p,
-                    new Promise((_, reject) =>
-                        setTimeout(() => reject(new Error('Timeout')), 30000)
-                    )
-                ])
-            )
-        );
-
-        // Flatten results
+        // Fetch schedules in parallel with concurrency limit
+        const BATCH_SIZE = 10;
         let sessions = [];
-        for (const result of results) {
-            if (result.status === 'fulfilled' && result.value) {
-                sessions.push(...result.value);
+
+        for (let i = 0; i < filteredRinks.length; i += BATCH_SIZE) {
+            const batch = filteredRinks.slice(i, i + BATCH_SIZE);
+            const batchPromises = batch.map(async rink => {
+                const schedule = await this.fetchSchedule(rink.id);
+                return schedule.map(session => ({
+                    rink: {
+                        id: rink.id,
+                        name: rink.name,
+                        address: rink.address,
+                        type: rink.type,
+                        lat: rink.lat,
+                        lng: rink.lng,
+                        distance: rink.distance
+                    },
+                    session
+                }));
+            });
+
+            const results = await Promise.allSettled(
+                batchPromises.map(p =>
+                    Promise.race([
+                        p,
+                        new Promise((_, reject) =>
+                            setTimeout(() => reject(new Error('Timeout')), 15000)
+                        )
+                    ])
+                )
+            );
+
+            for (const result of results) {
+                if (result.status === 'fulfilled' && result.value) {
+                    sessions.push(...result.value);
+                }
             }
         }
 
