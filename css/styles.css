@@ -536,9 +536,18 @@ body {
     color: var(--gray-500);
     text-decoration: none;
     transition: color 0.1s;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .action-link:hover {
+    color: var(--black);
+}
+
+.action-link:visited {
+    color: var(--gray-500);
+}
+
+.action-link:active {
     color: var(--black);
 }
 
