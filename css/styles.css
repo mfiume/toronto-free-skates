@@ -432,6 +432,12 @@ html {
     margin-bottom: 16px;
 }
 
+.sort-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
 .sort-buttons {
     display: flex;
     border: 1px solid var(--gray-300);
