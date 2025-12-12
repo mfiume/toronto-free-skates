@@ -43,10 +43,24 @@
                 </label>
             </div>
 
+            <!-- Date -->
+            <div class="sidebar-section">
+                <div class="section-label">Date</div>
+                <div class="filter-buttons" id="dateFilterControl">
+                    <button class="filter-btn active" data-value="any">Any</button>
+                    <button class="filter-btn" data-value="today">Today</button>
+                    <button class="filter-btn" data-value="tomorrow">Tomorrow</button>
+                    <button class="filter-btn" data-value="pick">Pick</button>
+                </div>
+                <div id="datePickerContainer" style="display: none; margin-top: 8px;">
+                    <input type="date" id="datePicker" class="date-picker-visible">
+                </div>
+            </div>
+
             <!-- Time of Day -->
             <div class="sidebar-section">
                 <div class="section-label">Time of Day</div>
-                <div class="filter-buttons">
+                <div class="filter-buttons" id="timeOfDayControl">
                     <button class="filter-btn active" data-value="all">All</button>
                     <button class="filter-btn" data-value="morning">Morning</button>
                     <button class="filter-btn" data-value="afternoon">Afternoon</button>
@@ -81,52 +95,25 @@
             <div class="content-header">
                 <button class="filter-toggle" id="filterToggle">Filters</button>
                 <div class="view-tabs">
-                    <button class="tab active" data-view="calendar">Calendar</button>
-                    <button class="tab" data-view="list">List</button>
+                    <button class="tab active" data-view="list">List</button>
                     <button class="tab" data-view="map">Map</button>
                 </div>
             </div>
 
-            <!-- Calendar View -->
-            <div id="calendarView" class="view active">
-                <div class="calendar-header">
-                    <button class="btn btn-icon" id="prevDay">◀</button>
-                    <div class="date-picker-wrapper">
-                        <button class="date-picker-btn" id="datePickerBtn">
-                            <span id="selectedDateDisplay">Today</span>
-                        </button>
-                        <input type="date" id="datePicker" class="date-picker-input">
-                    </div>
-                    <button class="btn btn-icon" id="nextDay">▶</button>
-                    <button class="btn btn-small" id="todayBtn">Today</button>
-                </div>
+            <!-- List View -->
+            <div id="listView" class="view active">
                 <div class="sort-bar">
-                    <label>Sort:</label>
-                    <select id="calendarSort">
-                        <option value="time">Time</option>
-                        <option value="name">Name</option>
-                        <option value="distance">Distance</option>
-                    </select>
-                    <input type="text" id="calendarSearch" placeholder="Search rinks...">
+                    <div class="sort-buttons" id="listSort">
+                        <button class="sort-btn active" data-value="time">Time</button>
+                        <button class="sort-btn" data-value="name">Name</button>
+                        <button class="sort-btn" data-value="distance">Distance</button>
+                    </div>
+                    <input type="text" id="listSearch" placeholder="Search rinks...">
                 </div>
                 <!-- Loading Indicator -->
                 <div id="loadingIndicator" class="loading">
                     <div class="spinner"></div>
                     <p>Loading skating sessions...</p>
-                </div>
-                <div id="calendarSessions" class="sessions-list"></div>
-            </div>
-
-            <!-- List View -->
-            <div id="listView" class="view">
-                <div class="sort-bar">
-                    <label>Sort:</label>
-                    <select id="listSort">
-                        <option value="time">Time</option>
-                        <option value="name">Name</option>
-                        <option value="distance">Distance</option>
-                    </select>
-                    <input type="text" id="listSearch" placeholder="Search rinks...">
                 </div>
                 <div id="listSessions" class="sessions-list"></div>
             </div>

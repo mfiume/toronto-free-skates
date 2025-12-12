@@ -1,6 +1,6 @@
 /**
  * Views for Toronto Free Skates
- * Handles calendar, list, and map view rendering
+ * Handles list and map view rendering
  */
 
 const Views = {
@@ -37,9 +37,15 @@ const Views = {
             this.initMap();
         }
 
-        // Invalidate map size when switching
+        // Invalidate map size and re-render when switching to map
         if (viewName === 'map' && this.map) {
-            setTimeout(() => this.map.invalidateSize(), 100);
+            setTimeout(() => {
+                this.map.invalidateSize();
+                // Re-render markers with current data
+                if (window.App && window.App.sessions) {
+                    this.renderMapView(window.App.sessions, window.App.rinks);
+                }
+            }, 100);
         }
     },
 
@@ -53,47 +59,6 @@ const Views = {
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(this.map);
-    },
-
-    /**
-     * Render sessions in calendar view
-     */
-    renderCalendarView(sessions, selectedDate, sortBy = 'time', searchQuery = '') {
-        const container = document.getElementById('calendarSessions');
-        const dateDisplay = document.getElementById('selectedDateDisplay');
-
-        // Format selected date
-        const dateStr = API.formatDate(selectedDate);
-        dateDisplay.textContent = this.formatDateDisplay(selectedDate);
-
-        // Filter to selected date
-        let daySessions = sessions.filter(item => item.session.date === dateStr);
-
-        // Apply search
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            daySessions = daySessions.filter(item =>
-                item.rink.name.toLowerCase().includes(query) ||
-                item.rink.address.toLowerCase().includes(query)
-            );
-        }
-
-        // Sort
-        daySessions = this.sortSessions(daySessions, sortBy);
-
-        // Render
-        if (daySessions.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">📅</div>
-                    <h3>No skating sessions</h3>
-                    <p>No sessions found for ${this.formatDateDisplay(selectedDate)}</p>
-                </div>
-            `;
-            return;
-        }
-
-        container.innerHTML = daySessions.map(item => this.renderSessionCard(item, false)).join('');
     },
 
     /**
@@ -133,7 +98,7 @@ const Views = {
         container.innerHTML = Object.entries(grouped).map(([date, items]) => `
             <div class="date-group">
                 <div class="date-group-header">${this.formatDateHeader(date)}</div>
-                ${items.map(item => this.renderSessionCard(item, true)).join('')}
+                ${items.map(item => this.renderSessionCard(item, false)).join('')}
             </div>
         `).join('');
     },
@@ -418,29 +383,6 @@ END:VCALENDAR`;
             groups[date].push(item);
         });
         return groups;
-    },
-
-    /**
-     * Format date for display (e.g., "Today" or "Mon, Dec 11")
-     */
-    formatDateDisplay(date) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-
-        const d = new Date(date);
-        d.setHours(0, 0, 0, 0);
-
-        if (d.getTime() === today.getTime()) return 'Today';
-        if (d.getTime() === tomorrow.getTime()) return 'Tomorrow';
-
-        return d.toLocaleDateString('en-US', {
-            weekday: 'short',
-            month: 'short',
-            day: 'numeric'
-        });
     },
 
     /**

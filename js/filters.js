@@ -7,6 +7,8 @@ const FilterSettings = {
     defaults: {
         maxDistance: 10,
         anyDistance: true,
+        dateFilter: 'any',
+        selectedDate: null,
         timeOfDay: 'all',
         rinkType: '',
         timeFilter: 'upcoming'
@@ -57,8 +59,46 @@ const FilterSettings = {
             this.triggerUpdate();
         });
 
+        // Date filter buttons
+        const datePickerContainer = document.getElementById('datePickerContainer');
+        const datePicker = document.getElementById('datePicker');
+
+        document.getElementById('dateFilterControl').querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const value = e.target.dataset.value;
+                this.settings.dateFilter = value;
+
+                // Update active state
+                e.target.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+
+                // Show/hide date picker
+                if (value === 'pick') {
+                    datePickerContainer.style.display = 'block';
+                    // Set to today if no date selected
+                    if (!this.settings.selectedDate) {
+                        const today = new Date();
+                        this.settings.selectedDate = this.formatDate(today);
+                        datePicker.value = this.settings.selectedDate;
+                    }
+                } else {
+                    datePickerContainer.style.display = 'none';
+                    this.settings.selectedDate = null;
+                }
+
+                this.save();
+                this.triggerUpdate();
+            });
+        });
+
+        datePicker.addEventListener('change', (e) => {
+            this.settings.selectedDate = e.target.value;
+            this.save();
+            this.triggerUpdate();
+        });
+
         // Time of day filter buttons
-        document.querySelectorAll('.sidebar-section:nth-child(4) .filter-btn').forEach(btn => {
+        document.getElementById('timeOfDayControl').querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const value = e.target.dataset.value;
                 this.settings.timeOfDay = value;
@@ -117,8 +157,25 @@ const FilterSettings = {
         anyDistance.checked = this.settings.anyDistance;
         distanceSlider.disabled = this.settings.anyDistance;
 
+        // Date filter
+        const datePickerContainer = document.getElementById('datePickerContainer');
+        const datePicker = document.getElementById('datePicker');
+
+        document.getElementById('dateFilterControl').querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.value === this.settings.dateFilter);
+        });
+
+        if (this.settings.dateFilter === 'pick') {
+            datePickerContainer.style.display = 'block';
+            if (this.settings.selectedDate) {
+                datePicker.value = this.settings.selectedDate;
+            }
+        } else {
+            datePickerContainer.style.display = 'none';
+        }
+
         // Time of day
-        document.querySelectorAll('.sidebar-section:nth-child(4) .filter-btn').forEach(btn => {
+        document.getElementById('timeOfDayControl').querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.value === this.settings.timeOfDay);
         });
 
@@ -141,12 +198,45 @@ const FilterSettings = {
     },
 
     /**
+     * Format date as YYYY-MM-DD
+     */
+    formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    },
+
+    /**
+     * Get the date string for filtering based on current settings
+     */
+    getFilterDate() {
+        if (this.settings.dateFilter === 'any') {
+            return null;
+        }
+        if (this.settings.dateFilter === 'today') {
+            return this.formatDate(new Date());
+        }
+        if (this.settings.dateFilter === 'tomorrow') {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return this.formatDate(tomorrow);
+        }
+        if (this.settings.dateFilter === 'pick' && this.settings.selectedDate) {
+            return this.settings.selectedDate;
+        }
+        return null;
+    },
+
+    /**
      * Get current filter settings for API
      */
     getFilters() {
         return {
             maxDistance: this.settings.maxDistance,
             anyDistance: this.settings.anyDistance,
+            dateFilter: this.settings.dateFilter,
+            filterDate: this.getFilterDate(),
             timeOfDay: this.settings.timeOfDay,
             rinkType: this.settings.rinkType,
             timeFilter: this.settings.timeFilter
@@ -169,6 +259,7 @@ const FilterSettings = {
         return (
             this.settings.maxDistance !== this.defaults.maxDistance ||
             this.settings.anyDistance !== this.defaults.anyDistance ||
+            this.settings.dateFilter !== this.defaults.dateFilter ||
             this.settings.timeOfDay !== this.defaults.timeOfDay ||
             this.settings.rinkType !== this.defaults.rinkType ||
             this.settings.timeFilter !== this.defaults.timeFilter

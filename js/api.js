@@ -229,6 +229,11 @@ const API = {
         return sessions.filter(item => {
             const { session } = item;
 
+            // Date filter
+            if (filters.filterDate) {
+                if (session.date !== filters.filterDate) return false;
+            }
+
             // Time of day filter
             if (filters.timeOfDay && filters.timeOfDay !== 'all') {
                 const hour = this.parseTime(session.time);

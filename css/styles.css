@@ -413,6 +413,14 @@ html {
     cursor: pointer;
 }
 
+.date-picker-visible {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--gray-300);
+    font-size: 14px;
+    background: var(--white);
+}
+
 /* Sort Bar */
 .sort-bar {
     display: flex;
@@ -424,24 +432,33 @@ html {
     margin-bottom: 16px;
 }
 
-.sort-bar label {
+.sort-buttons {
+    display: flex;
+    border: 1px solid var(--gray-300);
+}
+
+.sort-btn {
+    padding: 6px 12px;
+    border: none;
+    background: var(--white);
     font-size: 12px;
     font-weight: 600;
-    color: var(--gray-600);
-}
-
-.sort-bar select {
-    padding: 6px 10px;
-    border: 1px solid var(--gray-300);
-    font-size: 13px;
-    font-weight: 500;
-    background: var(--white);
     cursor: pointer;
+    transition: all 0.1s;
+    border-right: 1px solid var(--gray-300);
 }
 
-.sort-bar select:focus {
-    outline: none;
-    border-color: var(--black);
+.sort-btn:last-child {
+    border-right: none;
+}
+
+.sort-btn:hover {
+    background: var(--gray-100);
+}
+
+.sort-btn.active {
+    background: var(--black);
+    color: var(--white);
 }
 
 .sort-bar input[type="text"] {
@@ -622,17 +639,24 @@ html {
 }
 
 /* Custom Marker */
+.custom-marker-container {
+    background: transparent !important;
+    border: none !important;
+}
+
 .custom-marker {
     background: var(--black);
     color: var(--white);
     width: 28px;
     height: 28px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
     font-size: 11px;
-    border: 1px solid var(--white);
+    border: 2px solid var(--white);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .custom-marker.indoor {
@@ -643,11 +667,18 @@ html {
     background: var(--gray-500);
 }
 
+.user-marker-container {
+    background: transparent !important;
+    border: none !important;
+}
+
 .user-marker {
     background: var(--primary);
     width: 12px;
     height: 12px;
-    border: 1px solid var(--white);
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 /* Loading */
