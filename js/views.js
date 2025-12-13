@@ -212,9 +212,14 @@ const Views = {
             <h4 style="margin-bottom: 12px;">Upcoming Sessions</h4>
             ${sessions.slice(0, 10).map(session => `
                 <div style="padding: 12px; background: var(--gray-100); border-radius: 8px; margin-bottom: 8px;">
-                    <div style="font-weight: 600;">${this.formatDateHeader(session.date)}</div>
-                    <div style="color: var(--primary-color); font-weight: 600;">${session.time}</div>
-                    <div style="font-size: 13px; color: var(--text-secondary);">${session.age}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="font-weight: 600;">${this.formatDateHeader(session.date)}</div>
+                            <div style="color: var(--primary-color); font-weight: 600;">${session.time}</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">${session.age}</div>
+                        </div>
+                        <a class="action-link" href="#" onclick="event.preventDefault(); Views.addToCalendar('${rink.name.replace(/'/g, "\\'")}', '${rink.address.replace(/'/g, "\\'")}', '${session.date}', '${session.time}', '${session.age}')">Cal</a>
+                    </div>
                 </div>
             `).join('')}
             ${sessions.length > 10 ? `<p style="color: var(--text-secondary);">+ ${sessions.length - 10} more sessions</p>` : ''}
@@ -268,7 +273,7 @@ const Views = {
                     </div>
                 </div>
                 <div class="session-actions">
-                    <a class="action-link" href="#" onclick="event.preventDefault(); event.stopPropagation(); Views.openInMaps(${rink.lat}, ${rink.lng})">Map</a>
+                    <a class="action-link" href="#" onclick="event.preventDefault(); event.stopPropagation(); Views.openInMaps(${rink.lat}, ${rink.lng})">Directions</a>
                     <a class="action-link" href="#" onclick="event.preventDefault(); event.stopPropagation(); Views.addToCalendar('${rink.name.replace(/'/g, "\\'")}', '${rink.address.replace(/'/g, "\\'")}', '${session.date}', '${session.time}', '${session.age}')">Cal</a>
                 </div>
             </div>
