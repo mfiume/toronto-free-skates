@@ -156,14 +156,15 @@ const Views = {
             }
 
             const userIcon = L.divIcon({
-                html: '<div class="user-marker"></div>',
+                html: '<div class="user-marker"><div class="user-marker-pulse"></div></div>',
                 className: 'user-marker-container',
-                iconSize: [16, 16],
-                iconAnchor: [8, 8]
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
             });
 
             this.userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: userIcon })
-                .addTo(this.map);
+                .addTo(this.map)
+                .bindPopup('Your location');
 
             bounds.push([userLocation.lat, userLocation.lng]);
         }

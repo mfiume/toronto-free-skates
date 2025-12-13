@@ -355,12 +355,27 @@ html {
 .view {
     display: none;
     flex: 1;
-    padding: 24px;
+    overflow-y: auto;
 }
 
 .view.active {
     display: flex;
     flex-direction: column;
+}
+
+#listView {
+    padding: 0;
+}
+
+#listView .sort-bar {
+    margin: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+
+#listView .sessions-list {
+    padding: 0 24px 24px;
 }
 
 /* Calendar Header */
@@ -682,12 +697,36 @@ html {
 }
 
 .user-marker {
-    background: var(--primary);
-    width: 12px;
-    height: 12px;
+    background: #4285F4;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    border: 2px solid var(--white);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    border: 3px solid var(--white);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    position: relative;
+}
+
+.user-marker-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(66, 133, 244, 0.2);
+    animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
 }
 
 /* Loading */
@@ -762,8 +801,11 @@ html {
     border: 1px solid var(--gray-200);
     border-bottom: none;
     position: sticky;
-    top: 49px;
+    top: 45px;
     z-index: 5;
+    margin-left: -24px;
+    margin-right: -24px;
+    padding-left: 24px;
 }
 
 /* Responsive */
