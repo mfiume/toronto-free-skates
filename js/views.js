@@ -206,10 +206,8 @@ const Views = {
                     ${distanceHtml}
                 </div>
             </div>
-            <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                <button class="btn btn-secondary" onclick="Views.openInMaps(${rink.lat}, ${rink.lng})">
-                    🗺️ Directions
-                </button>
+            <div style="margin-bottom: 16px;">
+                <a class="action-link" href="#" onclick="event.preventDefault(); Views.openInMaps(${rink.lat}, ${rink.lng})">Directions</a>
             </div>
             <h4 style="margin-bottom: 12px;">Upcoming Sessions</h4>
             ${sessions.slice(0, 10).map(session => `
