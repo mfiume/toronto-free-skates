@@ -218,7 +218,7 @@ const Views = {
                             <div style="color: var(--primary-color); font-weight: 600;">${session.time}</div>
                             <div style="font-size: 13px; color: var(--text-secondary);">${session.age}</div>
                         </div>
-                        <a class="action-link" href="#" onclick="event.preventDefault(); Views.addToCalendar('${rink.name.replace(/'/g, "\\'")}', '${rink.address.replace(/'/g, "\\'")}', '${session.date}', '${session.time}', '${session.age}')">Cal</a>
+                        <a class="action-link" href="#" onclick="event.preventDefault(); Views.addToCalendar('${rink.name.replace(/'/g, "\\'")}', '${rink.address.replace(/'/g, "\\'")}', '${session.date}', '${session.time}', '${session.age}')">Add to Calendar</a>
                     </div>
                 </div>
             `).join('')}
@@ -274,7 +274,7 @@ const Views = {
                 </div>
                 <div class="session-actions">
                     <a class="action-link" href="#" onclick="event.preventDefault(); event.stopPropagation(); Views.openInMaps(${rink.lat}, ${rink.lng})">Directions</a>
-                    <a class="action-link" href="#" onclick="event.preventDefault(); event.stopPropagation(); Views.addToCalendar('${rink.name.replace(/'/g, "\\'")}', '${rink.address.replace(/'/g, "\\'")}', '${session.date}', '${session.time}', '${session.age}')">Cal</a>
+                    <a class="action-link" href="#" onclick="event.preventDefault(); event.stopPropagation(); Views.addToCalendar('${rink.name.replace(/'/g, "\\'")}', '${rink.address.replace(/'/g, "\\'")}', '${session.date}', '${session.time}', '${session.age}')">Add to Calendar</a>
                 </div>
             </div>
         `;
