@@ -430,6 +430,9 @@ html {
     background: var(--white);
     border: 1px solid var(--gray-200);
     margin-bottom: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .sort-label {
@@ -758,6 +761,9 @@ html {
     background: var(--gray-100);
     border: 1px solid var(--gray-200);
     border-bottom: none;
+    position: sticky;
+    top: 49px;
+    z-index: 5;
 }
 
 /* Responsive */
