@@ -8,6 +8,7 @@ const RinkSelector = {
     selectedRinkIds: new Set(),
     searchQuery: '',
     showAll: false,
+    urlHasRinks: false,
     INITIAL_DISPLAY_COUNT: 10,
 
     /**
@@ -19,9 +20,21 @@ const RinkSelector = {
     },
 
     /**
-     * Load saved selections from localStorage
+     * Load saved selections from URL params first, then localStorage
      */
     loadSelections() {
+        // First check URL params
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('rinks')) {
+            const rinkIds = params.get('rinks').split(',').map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+            if (rinkIds.length > 0) {
+                this.selectedRinkIds = new Set(rinkIds);
+                this.urlHasRinks = true;
+                return;
+            }
+        }
+
+        // Fall back to localStorage
         const stored = localStorage.getItem('skateFinderSelectedRinks');
         if (stored) {
             try {
@@ -34,10 +47,14 @@ const RinkSelector = {
     },
 
     /**
-     * Save selections to localStorage
+     * Save selections to localStorage and update URL
      */
     saveSelections() {
         localStorage.setItem('skateFinderSelectedRinks', JSON.stringify([...this.selectedRinkIds]));
+        // Update URL via FilterSettings
+        if (window.FilterSettings) {
+            FilterSettings.updateURL();
+        }
     },
 
     /**
@@ -74,8 +91,16 @@ const RinkSelector = {
     setRinks(rinks) {
         this.allRinks = rinks.sort((a, b) => a.name.localeCompare(b.name));
 
-        // If no selections saved, select all by default
-        if (this.selectedRinkIds.size === 0) {
+        // If URL had rinks param, validate selections against available rinks
+        if (this.urlHasRinks) {
+            // Filter to only valid rink IDs
+            const validIds = new Set(this.allRinks.map(r => r.id));
+            const validSelected = [...this.selectedRinkIds].filter(id => validIds.has(id));
+            this.selectedRinkIds = new Set(validSelected);
+            this.saveSelections();
+        }
+        // If no selections saved and no URL params, select all by default
+        else if (this.selectedRinkIds.size === 0) {
             this.allRinks.forEach(rink => this.selectedRinkIds.add(rink.id));
             this.saveSelections();
         }

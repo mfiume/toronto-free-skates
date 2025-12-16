@@ -1,6 +1,6 @@
 /**
  * Filter Settings for Toronto Free Skates
- * Manages filter state with localStorage persistence
+ * Manages filter state with URL params and localStorage persistence
  */
 
 const FilterSettings = {
@@ -17,22 +17,147 @@ const FilterSettings = {
     settings: {},
 
     /**
-     * Initialize filter settings from localStorage
+     * Initialize filter settings - URL params take priority, then localStorage
      */
     init() {
-        const stored = localStorage.getItem('skateFinderFilters');
-        if (stored) {
-            try {
-                this.settings = { ...this.defaults, ...JSON.parse(stored) };
-            } catch {
+        // First try URL params
+        const urlSettings = this.readFromURL();
+
+        if (urlSettings) {
+            this.settings = { ...this.defaults, ...urlSettings };
+        } else {
+            // Fall back to localStorage
+            const stored = localStorage.getItem('skateFinderFilters');
+            if (stored) {
+                try {
+                    this.settings = { ...this.defaults, ...JSON.parse(stored) };
+                } catch {
+                    this.settings = { ...this.defaults };
+                }
+            } else {
                 this.settings = { ...this.defaults };
             }
-        } else {
-            this.settings = { ...this.defaults };
         }
 
         this.bindUI();
         this.updateUI();
+    },
+
+    /**
+     * Read filter settings from URL params
+     */
+    readFromURL() {
+        const params = new URLSearchParams(window.location.search);
+
+        // Check if any filter params exist
+        const hasParams = params.has('dist') || params.has('anyDist') ||
+                         params.has('date') || params.has('pickDate') ||
+                         params.has('time') || params.has('type') ||
+                         params.has('show') || params.has('rinks');
+
+        if (!hasParams) return null;
+
+        const settings = {};
+
+        // Distance
+        if (params.has('dist')) {
+            const dist = parseInt(params.get('dist'), 10);
+            if (!isNaN(dist) && dist >= 1 && dist <= 50) {
+                settings.maxDistance = dist;
+            }
+        }
+
+        // Any distance
+        if (params.has('anyDist')) {
+            settings.anyDistance = params.get('anyDist') === '1';
+        }
+
+        // Date filter
+        if (params.has('date')) {
+            const dateVal = params.get('date');
+            if (['any', 'today', 'tomorrow', 'pick'].includes(dateVal)) {
+                settings.dateFilter = dateVal;
+            }
+        }
+
+        // Selected date (for pick mode)
+        if (params.has('pickDate')) {
+            settings.selectedDate = params.get('pickDate');
+        }
+
+        // Time of day
+        if (params.has('time')) {
+            const timeVal = params.get('time');
+            if (['all', 'morning', 'afternoon', 'evening'].includes(timeVal)) {
+                settings.timeOfDay = timeVal;
+            }
+        }
+
+        // Rink type
+        if (params.has('type')) {
+            const typeVal = params.get('type');
+            if (['', 'Indoor', 'Outdoor'].includes(typeVal)) {
+                settings.rinkType = typeVal;
+            }
+        }
+
+        // Session filter (upcoming/all/past)
+        if (params.has('show')) {
+            const showVal = params.get('show');
+            if (['upcoming', 'all', 'past'].includes(showVal)) {
+                settings.timeFilter = showVal;
+            }
+        }
+
+        return settings;
+    },
+
+    /**
+     * Update URL with current filter settings
+     */
+    updateURL() {
+        const params = new URLSearchParams();
+
+        // Only add non-default values to keep URL clean
+        if (this.settings.maxDistance !== this.defaults.maxDistance) {
+            params.set('dist', this.settings.maxDistance);
+        }
+        if (this.settings.anyDistance !== this.defaults.anyDistance) {
+            params.set('anyDist', this.settings.anyDistance ? '1' : '0');
+        }
+        if (this.settings.dateFilter !== this.defaults.dateFilter) {
+            params.set('date', this.settings.dateFilter);
+        }
+        if (this.settings.selectedDate) {
+            params.set('pickDate', this.settings.selectedDate);
+        }
+        if (this.settings.timeOfDay !== this.defaults.timeOfDay) {
+            params.set('time', this.settings.timeOfDay);
+        }
+        if (this.settings.rinkType !== this.defaults.rinkType) {
+            params.set('type', this.settings.rinkType);
+        }
+        if (this.settings.timeFilter !== this.defaults.timeFilter) {
+            params.set('show', this.settings.timeFilter);
+        }
+
+        // Add rink selections if not all selected
+        if (window.RinkSelector) {
+            const selectedIds = RinkSelector.getSelectedRinkIds();
+            const allIds = RinkSelector.allRinks.map(r => r.id);
+
+            // Only add to URL if not all rinks are selected
+            if (selectedIds.length > 0 && selectedIds.length < allIds.length) {
+                params.set('rinks', selectedIds.join(','));
+            }
+        }
+
+        // Update URL without reload
+        const newURL = params.toString()
+            ? `${window.location.pathname}?${params.toString()}`
+            : window.location.pathname;
+
+        window.history.replaceState({}, '', newURL);
     },
 
     /**
@@ -191,10 +316,11 @@ const FilterSettings = {
     },
 
     /**
-     * Save settings to localStorage
+     * Save settings to localStorage and update URL
      */
     save() {
         localStorage.setItem('skateFinderFilters', JSON.stringify(this.settings));
+        this.updateURL();
     },
 
     /**
