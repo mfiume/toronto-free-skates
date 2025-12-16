@@ -74,13 +74,7 @@ const Views = {
         const grouped = this.groupByDate(filtered);
 
         if (Object.keys(grouped).length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">🔍</div>
-                    <h3>No skating sessions found</h3>
-                    <p>Try adjusting your filters or expanding your search distance.</p>
-                </div>
-            `;
+            container.innerHTML = '';
             return;
         }
 
