@@ -3,7 +3,8 @@
  */
 
 const App = {
-    sessions: [],
+    allSessions: [],  // All sessions from API
+    sessions: [],     // Filtered sessions (by rink selection)
     rinks: [],
     isLoading: false,
 
@@ -16,6 +17,7 @@ const App = {
         // Initialize modules
         await LocationManager.init();
         FilterSettings.init();
+        RinkSelector.init();
         Views.initTabs();
 
         // Bind UI events
@@ -54,11 +56,6 @@ const App = {
                 this.updateListView();
             });
         });
-
-        // List search
-        document.getElementById('listSearch').addEventListener('input', () => {
-            this.updateListView();
-        });
     },
 
     /**
@@ -79,13 +76,16 @@ const App = {
 
             const { sessions, rinks } = await API.fetchAllSessions(userLocation, filters);
 
-            this.sessions = sessions;
+            this.allSessions = sessions;
             this.rinks = rinks;
 
-            console.log(`Loaded ${sessions.length} sessions from ${rinks.length} rinks`);
+            // Update rink selector with available rinks
+            RinkSelector.setRinks(rinks);
 
-            // Update all views
-            this.updateAllViews();
+            // Apply rink filter
+            this.filterByRinks();
+
+            console.log(`Loaded ${sessions.length} sessions from ${rinks.length} rinks`);
         } catch (error) {
             console.error('Error loading sessions:', error);
             this.showError('Failed to load skating sessions. Please try again.');
@@ -93,6 +93,19 @@ const App = {
             this.isLoading = false;
             this.showLoading(false);
         }
+    },
+
+    /**
+     * Filter sessions by selected rinks
+     */
+    filterByRinks() {
+        const selectedIds = RinkSelector.getSelectedRinkIds();
+        const selectedSet = new Set(selectedIds);
+
+        this.sessions = this.allSessions.filter(item => selectedSet.has(item.rink.id));
+
+        // Update all views
+        this.updateAllViews();
     },
 
     /**
@@ -110,9 +123,8 @@ const App = {
     updateListView() {
         const activeBtn = document.querySelector('#listSort .sort-btn.active');
         const sortBy = activeBtn ? activeBtn.dataset.value : 'time';
-        const searchQuery = document.getElementById('listSearch').value;
 
-        Views.renderListView(this.sessions, sortBy, searchQuery);
+        Views.renderListView(this.sessions, sortBy, '');
     },
 
     /**
@@ -133,7 +145,10 @@ const App = {
 
             // Update empty message based on filters
             const message = document.getElementById('emptyMessage');
-            if (FilterSettings.hasActiveFilters()) {
+            const selectedRinks = RinkSelector.getSelectedRinkIds().length;
+            if (selectedRinks === 0) {
+                message.textContent = 'No rinks selected. Select rinks from the Filters menu.';
+            } else if (FilterSettings.hasActiveFilters()) {
                 message.textContent = 'Try adjusting your filters or expanding your search distance.';
             } else {
                 message.textContent = 'No skating sessions available at this time.';

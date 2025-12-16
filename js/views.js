@@ -64,22 +64,11 @@ const Views = {
     /**
      * Render sessions in list view
      */
-    renderListView(sessions, sortBy = 'time', searchQuery = '') {
+    renderListView(sessions, sortBy = 'time') {
         const container = document.getElementById('listSessions');
 
-        let filtered = sessions;
-
-        // Apply search
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(item =>
-                item.rink.name.toLowerCase().includes(query) ||
-                item.rink.address.toLowerCase().includes(query)
-            );
-        }
-
         // Sort
-        filtered = this.sortSessions(filtered, sortBy);
+        const filtered = this.sortSessions(sessions, sortBy);
 
         // Group by date
         const grouped = this.groupByDate(filtered);
