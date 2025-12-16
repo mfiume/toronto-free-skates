@@ -38,10 +38,12 @@ const App = {
 
         filterToggle.addEventListener('click', () => {
             sidebar.classList.add('open');
+            document.body.classList.add('sidebar-open');
         });
 
         sidebarClose.addEventListener('click', () => {
             sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
         });
 
         // List sort buttons

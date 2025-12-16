@@ -271,10 +271,12 @@ html {
     padding: 6px 12px;
     border: 1px solid var(--gray-300);
     background: var(--white);
+    color: var(--black);
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.1s;
+    -webkit-appearance: none;
 }
 
 .filter-btn:hover {
@@ -447,11 +449,13 @@ html {
     padding: 6px 12px;
     border: none;
     background: var(--white);
+    color: var(--black);
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.1s;
     border-right: 1px solid var(--gray-300);
+    -webkit-appearance: none;
 }
 
 .sort-btn:last-child {
@@ -786,6 +790,10 @@ html {
 
 /* Responsive */
 @media (max-width: 900px) {
+    body.sidebar-open {
+        overflow: hidden;
+    }
+
     .sidebar {
         position: fixed;
         top: 0;
@@ -797,6 +805,7 @@ html {
         z-index: 1000;
         transform: translateX(-100%);
         transition: transform 0.3s ease;
+        overflow-y: auto;
     }
 
     .sidebar.open {
@@ -833,6 +842,16 @@ html {
         flex: 1;
         text-align: center;
         padding: 10px 12px;
+    }
+
+    .sort-bar {
+        flex-wrap: wrap;
+    }
+
+    .sort-bar input[type="text"] {
+        width: 100%;
+        flex: none;
+        margin-top: 8px;
     }
 
     #mapView.active {
