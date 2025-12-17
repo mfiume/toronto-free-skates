@@ -110,7 +110,7 @@
         <main class="main-content">
             <!-- List View -->
             <div id="listView" class="view active">
-                <div class="sort-bar">
+                <div class="view-header">
                     <button class="filter-toggle" id="filterToggle">Filters</button>
                     <span class="sort-label">View</span>
                     <div class="sort-buttons view-tabs" id="viewTabs">
@@ -124,12 +124,14 @@
                         <button class="sort-btn" data-value="distance">Distance</button>
                     </div>
                 </div>
-                <!-- Loading Indicator -->
-                <div id="loadingIndicator" class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading skating sessions...</p>
+                <div class="list-content">
+                    <!-- Loading Indicator -->
+                    <div id="loadingIndicator" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading skating sessions...</p>
+                    </div>
+                    <div id="listSessions" class="sessions-list"></div>
                 </div>
-                <div id="listSessions" class="sessions-list"></div>
             </div>
 
             <!-- Map View -->
