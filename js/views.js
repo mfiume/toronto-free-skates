@@ -12,7 +12,16 @@ const Views = {
      * Initialize view tabs
      */
     initTabs() {
+        // List view tabs
         document.querySelectorAll('#viewTabs .sort-btn').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const viewName = tab.dataset.view;
+                this.switchView(viewName);
+            });
+        });
+
+        // Map view tabs
+        document.querySelectorAll('#viewTabsMap .sort-btn').forEach(tab => {
             tab.addEventListener('click', () => {
                 const viewName = tab.dataset.view;
                 this.switchView(viewName);
@@ -24,9 +33,9 @@ const Views = {
      * Switch to a view
      */
     switchView(viewName) {
-        // Update tabs
-        document.querySelectorAll('#viewTabs .sort-btn').forEach(t => t.classList.remove('active'));
-        document.querySelector(`#viewTabs .sort-btn[data-view="${viewName}"]`).classList.add('active');
+        // Update both tab groups
+        document.querySelectorAll('#viewTabs .sort-btn, #viewTabsMap .sort-btn').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll(`.sort-btn[data-view="${viewName}"]`).forEach(t => t.classList.add('active'));
 
         // Update views
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));

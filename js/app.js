@@ -35,13 +35,17 @@ const App = {
     bindEvents() {
         // Mobile filter toggle
         const filterToggle = document.getElementById('filterToggle');
+        const filterToggleMap = document.getElementById('filterToggleMap');
         const sidebar = document.getElementById('sidebar');
         const sidebarClose = document.getElementById('sidebarClose');
 
-        filterToggle.addEventListener('click', () => {
+        const openSidebar = () => {
             sidebar.classList.add('open');
             document.body.classList.add('sidebar-open');
-        });
+        };
+
+        filterToggle.addEventListener('click', openSidebar);
+        filterToggleMap.addEventListener('click', openSidebar);
 
         sidebarClose.addEventListener('click', () => {
             sidebar.classList.remove('open');

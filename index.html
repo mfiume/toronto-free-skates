@@ -108,14 +108,10 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Header with Filter Toggle -->
-            <div class="content-header">
-                <button class="filter-toggle" id="filterToggle">Filters</button>
-            </div>
-
             <!-- List View -->
             <div id="listView" class="view active">
                 <div class="sort-bar">
+                    <button class="filter-toggle" id="filterToggle">Filters</button>
                     <span class="sort-label">View</span>
                     <div class="sort-buttons view-tabs" id="viewTabs">
                         <button class="sort-btn active" data-view="list">List</button>
@@ -138,10 +134,20 @@
 
             <!-- Map View -->
             <div id="mapView" class="view">
-                <div id="map"></div>
-                <div id="mapSidebar" class="map-sidebar">
-                    <h3 id="mapSidebarTitle">Select a rink</h3>
-                    <div id="mapSidebarContent"></div>
+                <div class="map-header">
+                    <button class="filter-toggle" id="filterToggleMap">Filters</button>
+                    <span class="sort-label">View</span>
+                    <div class="sort-buttons view-tabs" id="viewTabsMap">
+                        <button class="sort-btn" data-view="list">List</button>
+                        <button class="sort-btn active" data-view="map">Map</button>
+                    </div>
+                </div>
+                <div class="map-content">
+                    <div id="map"></div>
+                    <div id="mapSidebar" class="map-sidebar">
+                        <h3 id="mapSidebarTitle">Select a rink</h3>
+                        <div id="mapSidebarContent"></div>
+                    </div>
                 </div>
             </div>
 
