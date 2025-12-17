@@ -12,7 +12,7 @@ const Views = {
      * Initialize view tabs
      */
     initTabs() {
-        document.querySelectorAll('.tab').forEach(tab => {
+        document.querySelectorAll('#viewTabs .sort-btn').forEach(tab => {
             tab.addEventListener('click', () => {
                 const viewName = tab.dataset.view;
                 this.switchView(viewName);
@@ -25,8 +25,8 @@ const Views = {
      */
     switchView(viewName) {
         // Update tabs
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelector(`.tab[data-view="${viewName}"]`).classList.add('active');
+        document.querySelectorAll('#viewTabs .sort-btn').forEach(t => t.classList.remove('active'));
+        document.querySelector(`#viewTabs .sort-btn[data-view="${viewName}"]`).classList.add('active');
 
         // Update views
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));

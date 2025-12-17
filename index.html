@@ -108,18 +108,19 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- View Tabs -->
+            <!-- Header with Filter Toggle -->
             <div class="content-header">
                 <button class="filter-toggle" id="filterToggle">Filters</button>
-                <div class="view-tabs">
-                    <button class="tab active" data-view="list">List</button>
-                    <button class="tab" data-view="map">Map</button>
-                </div>
             </div>
 
             <!-- List View -->
             <div id="listView" class="view active">
                 <div class="sort-bar">
+                    <span class="sort-label">View</span>
+                    <div class="sort-buttons view-tabs" id="viewTabs">
+                        <button class="sort-btn active" data-view="list">List</button>
+                        <button class="sort-btn" data-view="map">Map</button>
+                    </div>
                     <span class="sort-label">Sort by</span>
                     <div class="sort-buttons" id="listSort">
                         <button class="sort-btn active" data-value="time">Time</button>

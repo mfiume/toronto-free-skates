@@ -437,36 +437,9 @@ html {
     background: var(--gray-100);
 }
 
-/* View Tabs */
+/* View Tabs (now uses sort-btn styles) */
 .view-tabs {
-    display: flex;
-    gap: 0;
-    border: 1px solid var(--gray-300);
-    width: fit-content;
-}
-
-.tab {
-    padding: 10px 24px;
-    border: none;
-    background: var(--white);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.1s;
-    border-right: 1px solid var(--gray-300);
-}
-
-.tab:last-child {
-    border-right: none;
-}
-
-.tab.active {
-    background: var(--black);
-    color: var(--white);
-}
-
-.tab:hover:not(.active) {
-    background: var(--gray-100);
+    /* Uses sort-buttons styling */
 }
 
 /* Views */
@@ -938,14 +911,9 @@ html {
         padding: 12px 16px;
     }
 
-    .view-tabs {
-        flex: 1;
-    }
-
-    .tab {
-        flex: 1;
-        text-align: center;
-        padding: 10px 12px;
+    .sort-bar {
+        flex-wrap: wrap;
+        gap: 8px;
     }
 
     #mapView.active {
