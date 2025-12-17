@@ -50,27 +50,24 @@ const FilterSettings = {
         const params = new URLSearchParams(window.location.search);
 
         // Check if any filter params exist
-        const hasParams = params.has('dist') || params.has('anyDist') ||
-                         params.has('date') || params.has('pickDate') ||
-                         params.has('time') || params.has('type') ||
-                         params.has('show') || params.has('rinks');
+        const hasParams = params.has('dist') || params.has('date') ||
+                         params.has('pickDate') || params.has('time') ||
+                         params.has('type') || params.has('show') ||
+                         params.has('rinks');
 
         if (!hasParams) return null;
 
         const settings = {};
 
-        // Distance
+        // Distance: if dist param exists, it implies anyDistance=false
         if (params.has('dist')) {
             const dist = parseInt(params.get('dist'), 10);
             if (!isNaN(dist) && dist >= 1 && dist <= 50) {
                 settings.maxDistance = dist;
+                settings.anyDistance = false;
             }
         }
-
-        // Any distance
-        if (params.has('anyDist')) {
-            settings.anyDistance = params.get('anyDist') === '1';
-        }
+        // No dist param means use default (anyDistance=true)
 
         // Date filter
         if (params.has('date')) {
@@ -118,12 +115,13 @@ const FilterSettings = {
     updateURL() {
         const params = new URLSearchParams();
 
-        // Only add non-default values to keep URL clean
-        if (this.settings.maxDistance !== this.defaults.maxDistance) {
+        // Distance: anyDist and dist are mutually exclusive
+        // Default is anyDistance=true, so only add params when not default
+        if (this.settings.anyDistance) {
+            // Any distance is default, no param needed
+        } else {
+            // Specific distance - add dist param (anyDist=0 implied)
             params.set('dist', this.settings.maxDistance);
-        }
-        if (this.settings.anyDistance !== this.defaults.anyDistance) {
-            params.set('anyDist', this.settings.anyDistance ? '1' : '0');
         }
         if (this.settings.dateFilter !== this.defaults.dateFilter) {
             params.set('date', this.settings.dateFilter);
